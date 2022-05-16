@@ -3,7 +3,7 @@ from torch.utils.tensorboard import SummaryWriter
 from PIL import Image
 import os
 from torch.utils.data import Dataset, DataLoader
-import numpy as np
+from image_crop import crop_image
 
 class MyData(Dataset):
 
@@ -26,8 +26,7 @@ class MyData(Dataset):
 
         # label_item_path = os.path.join(self.root_dir, self.label_dir, label_name)
         img = Image.open(img_item_path)
-
-        # img = np.array(img)
+        
         img = self.transform(img)
         
         sample = {'img': img}

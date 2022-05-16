@@ -1,11 +1,6 @@
 from torchvision import transforms
 import torch
 from torch.utils.tensorboard import SummaryWriter
-from PIL import Image
-import os
-from torch.utils.data import Dataset, DataLoader
-import numpy as np
-import cv2
 from dataset_define import *
 
 def crop_image(img, height, width):
