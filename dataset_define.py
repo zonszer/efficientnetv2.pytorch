@@ -29,7 +29,7 @@ class MyData(Dataset):
 
         H = img.shape[1]
         W = img.shape[2]
-        patch_num = min( H // height,  W // width)        #采取可用的最大的正方形面积
+        patch_num = min( H // height,  W // width)        #采取可用的最大的正方形面积patch_num = imgs.shape[0]
 
         imgs = img[:, 0:height*1, 0:width*1]
         imgs = imgs.unsqueeze(0)
@@ -39,8 +39,8 @@ class MyData(Dataset):
                 img_current = img[:, height*(i-1):height*i, height*(j-1):width*j]
                 img_current = img_current.unsqueeze(0)
                 imgs = torch.cat([imgs, img_current], dim=0)
-        self.len = imgs.shape[0]
-        self.one_hot = self.create_onehot_position_label(self.len)
+        self.patch_num = imgs.shape[0]      
+        self.one_hot = self.create_onehot_position_label(patch_num)
         
         return imgs
 
@@ -59,4 +59,5 @@ class MyData(Dataset):
 
     def __len__(self):
         "return the num_len of the cutten patches of one figure"
-        return self.len
+        # return self.len
+        return len(self.image_list)
