@@ -57,6 +57,9 @@ class MyData(Dataset):
 
         return imgs
 
+    def transform_patches(self, patch_num):
+        
+
     def __len__(self):
         "return the num_len of the cutten patches of one figure"
         # return self.len

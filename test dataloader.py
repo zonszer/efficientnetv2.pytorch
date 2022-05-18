@@ -16,7 +16,7 @@ if __name__ == '__main__':
     RGB_dataset = MyData(root_dir, dataset_type, transform)
     
     #output---->注意data的输出格式应为[batch_size,C,H,W]
-    train_loader = DataLoader(RGB_dataset, batch_size = 1)      
+    train_loader = DataLoader(RGB_dataset, batch_size = 1, shuffle=False)      
     writer = SummaryWriter("attempt_1_logs")
     step = 0
     for data in train_loader:
