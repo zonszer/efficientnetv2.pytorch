@@ -1,7 +1,7 @@
 
 import torch
-from torch import nn, strided
-from torch.nn import Conv2d, MaxPool2d, Flatten, Linear, Sequential
+from torch import nn
+from torch.nn import Conv2d, MaxPool2d, Flatten, Linear, Sequential, ConvTranspose2d
 from torch.utils.tensorboard import SummaryWriter
 
 
@@ -17,12 +17,11 @@ class auto_encoder(nn.Module):
             Conv2d(32, 32, 4, stride=2, padding=1), #cov6
             
             
-            
-            Conv2d(32, 32, 4, stride=2, padding=1), #decov4
-            # MaxPool2d(2),
-            # Flatten(),
-            # Linear(1024, 64),
-            # Linear(64, 10)
+            ConvTranspose2d(32, 32, 4, stride=2, padding=1),   #decov4
+            ConvTranspose2d(32, 16, 4, stride=2, padding=1),   #decov3
+            ConvTranspose2d(16, 16, 4, stride=2, padding=1),   #decov2
+            ConvTranspose2d(16, 8, 4, stride=2, padding=1),   #decov1
+            ConvTranspose2d(8, 1, 4, stride=2, padding=1),   #decov0
         )
 
     def forward(self, x):
