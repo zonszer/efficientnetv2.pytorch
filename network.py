@@ -51,24 +51,23 @@ if __name__ == '__main__':
                                                                 translate = (0.2,0.2),
                                                                 scale = (0.5, 1),
                                                                 shear = None)
-        imgs = data[1][0]
-        RGB_imgs = data[0][0]
-        imgs = scale_to64(imgs)
-        imgs = Random_scale_rotate_translate(imgs)
-        imgs = imgs.unsqueeze(0)
-        RGB_imgs = RGB_imgs.unsqueeze(0)
+        infrared_imgs = data[1][0]; RGB_imgs = data[0][0]
+        infrared_imgs = scale_to64(infrared_imgs); RGB_imgs = scale_to64(RGB_imgs)
+        infrared_imgs = Random_scale_rotate_translate(infrared_imgs)
+        infrared_imgs = infrared_imgs.unsqueeze(0); RGB_imgs = RGB_imgs.unsqueeze(0)
         for i in range(data.shape[1]):
-            img = data[1][i]
-            RGB_img = data[0][i]
-            img = scale_to64(img)
-            transformed_img = Random_scale_rotate_translate(img)
+            infrared_img = data[1][i]; RGB_img = data[0][i]
+            infrared_img = scale_to64(infrared_img); RGB_img = scale_to64(RGB_img)
+            transformed_img = Random_scale_rotate_translate(infrared_img)   #infrared
             transformed_img = transformed_img.unsqueeze(0)
-            imgs = torch.cat([imgs, transformed_img], dim=0)
-            scale_to64(RGB_imgs)
+            infrared_imgs = torch.cat([infrared_imgs, transformed_img], dim=0)
+
+            transformed_img = RGB_img.unsqueeze(0)      #RGB
+            infrared_imgs = torch.cat([RGB_imgs, transformed_img], dim=0)
         
         SAE = auto_encoder()
-        # infrared_patches = torch.reshape(imgs[1:], ( -1, 1, 64, 64))
-        infrared_patches = imgs[1:]
+        # infrared_patches = torch.reshape(infrared_imgs[1:], ( -1, 1, 64, 64))
+        infrared_patches = infrared_imgs[1:]
         RGB_patches = data[0]
         infrared_output = SAE(infrared_patches)
         RGB_output = SAE(RGB_patches)
@@ -77,4 +76,6 @@ if __name__ == '__main__':
         writer.add_images('RGB_output', RGB_output, step)     
         step = step + 1
         writer.add_graph(SAE, infrared_patches)
+
+        
     writer.close()
