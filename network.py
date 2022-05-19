@@ -49,7 +49,7 @@ if __name__ == '__main__':
         scale_to64 = transforms.Pad(padding=32)
         Random_scale_rotate_translate = transforms.RandomAffine(degrees=(-180, 180),   
                                                                 translate = (0.2,0.2),
-                                                                scale = (0.5, 1),
+                                                                scale = (0.75, 1),
                                                                 shear = None)
         infrared_imgs = data[1][0]; RGB_imgs = data[0][0]
         infrared_imgs = scale_to64(infrared_imgs); RGB_imgs = scale_to64(RGB_imgs)
@@ -66,16 +66,14 @@ if __name__ == '__main__':
             infrared_imgs = torch.cat([RGB_imgs, transformed_img], dim=0)
         
         SAE = auto_encoder()
-        # infrared_patches = torch.reshape(infrared_imgs[1:], ( -1, 1, 64, 64))
-        infrared_patches = infrared_imgs[1:]
-        RGB_patches = data[0]
-        infrared_output = SAE(infrared_patches)
-        RGB_output = SAE(RGB_patches)
+        loss = 
+        infrared_patches = infrared_imgs[1:]; RGB_patches = RGB_imgs[1:]
+        infrared_output = SAE(infrared_patches); RGB_output = SAE(RGB_patches)
 
         writer.add_images('infrared_output', infrared_output, step)     
         writer.add_images('RGB_output', RGB_output, step)     
         step = step + 1
         writer.add_graph(SAE, infrared_patches)
 
-        
+
     writer.close()
