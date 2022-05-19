@@ -52,15 +52,19 @@ if __name__ == '__main__':
                                                                 scale = (0.5, 1),
                                                                 shear = None)
         imgs = data[1][0]
+        RGB_imgs = data[0][0]
         imgs = scale_to64(imgs)
         imgs = Random_scale_rotate_translate(imgs)
         imgs = imgs.unsqueeze(0)
+        RGB_imgs = RGB_imgs.unsqueeze(0)
         for i in range(data.shape[1]):
             img = data[1][i]
+            RGB_img = data[0][i]
             img = scale_to64(img)
             transformed_img = Random_scale_rotate_translate(img)
             transformed_img = transformed_img.unsqueeze(0)
             imgs = torch.cat([imgs, transformed_img], dim=0)
+            scale_to64(RGB_imgs)
         
         SAE = auto_encoder()
         # infrared_patches = torch.reshape(imgs[1:], ( -1, 1, 64, 64))
