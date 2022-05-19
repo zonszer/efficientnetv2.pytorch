@@ -64,12 +64,29 @@ if __name__ == '__main__':
 
             transformed_img = RGB_img.unsqueeze(0)      #RGB
             infrared_imgs = torch.cat([RGB_imgs, transformed_img], dim=0)
-        
-        SAE = auto_encoder()
-        loss = 
-        infrared_patches = infrared_imgs[1:]; RGB_patches = RGB_imgs[1:]
-        infrared_output = SAE(infrared_patches); RGB_output = SAE(RGB_patches)
 
+        #2. loss and optimizer
+        # ===================define=====================
+        SAE = auto_encoder()
+        end_toend_loss = nn.MSELoss()    ##!
+        train_loss = [[], []]
+        # optimizer = torch.optim.Adam(SAE.parameters(), lr=learning_rate,
+        #                             weight_decay=1e-5)
+
+        infrared_patches = infrared_imgs[1:]; RGB_patches = RGB_imgs[1:]
+        # ===================forward=====================
+        infrared_output = SAE(infrared_patches); RGB_output = SAE(RGB_patches)
+        infrared_loss = end_toend_loss(infrared_output, infrared_patches)
+        RGB_loss = end_toend_loss(RGB_output, RGB_patches)
+
+        # ===================backward====================
+        # optimizer.zero_grad()
+        infrared_loss.backward()
+        RGB_loss.backward()
+        # optimizer.step()
+        train_loss[0].append(infrared_loss.data)
+        train_loss[1].append(RGB_loss.data)
+        # ===================log========================
         writer.add_images('infrared_output', infrared_output, step)     
         writer.add_images('RGB_output', RGB_output, step)     
         step = step + 1
